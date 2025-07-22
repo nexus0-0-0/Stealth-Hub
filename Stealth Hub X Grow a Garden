@@ -1,91 +1,78 @@
-// ==UserScript==
-// @name         Stealth Hub
-// @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Automate bamboo buying, planting, harvesting, selling, egg handling, and prismatic purchase
-// @author       You
-// @match        *://*/*
-// @grant        none
-// ==/UserScript==
+-- Stealth Hub for Roblox
+-- UI with toggle button and automation features
+-- Requires executor (e.g., Synapse X, Fluxus, Ronix, etc)
 
-(function() {
-    'use strict';
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
-    let enabled = false;
+local enabled = false
 
-    const createUI = () => {
-        const container = document.createElement('div');
-        container.id = 'stealthHubContainer';
-        container.style = 'position: fixed; top: 100px; left: 100px; width: 200px; background: #111; color: white; border: 1px solid #444; padding: 10px; z-index: 10000; font-family: Arial; border-radius: 8px;';
+-- Create GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "StealthHubGUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = Player:WaitForChild("PlayerGui")
 
-        const title = document.createElement('div');
-        title.innerText = 'Stealth Hub';
-        title.style = 'font-size: 18px; margin-bottom: 10px; text-align: center;';
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 220, 0, 100)
+Frame.Position = UDim2.new(0, 100, 0, 100)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Frame.BorderSizePixel = 2
+Frame.Active = true
+Frame.Draggable = true
+Frame.Parent = ScreenGui
 
-        const enableToggle = document.createElement('button');
-        enableToggle.innerText = 'Enable';
-        enableToggle.style = 'width: 100%; padding: 5px;';
-        enableToggle.onclick = () => {
-            enabled = !enabled;
-            enableToggle.innerText = enabled ? 'Disable' : 'Enable';
-        };
+local Title = Instance.new("TextLabel")
+Title.Text = "Stealth Hub"
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 20
+Title.Parent = Frame
 
-        container.appendChild(title);
-        container.appendChild(enableToggle);
-        document.body.appendChild(container);
+local Toggle = Instance.new("TextButton")
+Toggle.Text = "Enable"
+Toggle.Size = UDim2.new(0.9, 0, 0, 30)
+Toggle.Position = UDim2.new(0.05, 0, 0, 40)
+Toggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+Toggle.Font = Enum.Font.SourceSans
+Toggle.TextSize = 18
+Toggle.Parent = Frame
 
-        makeDraggable(container);
-    };
+Toggle.MouseButton1Click:Connect(function()
+    enabled = not enabled
+    Toggle.Text = enabled and "Disable" or "Enable"
+end)
 
-    const makeDraggable = (el) => {
-        el.onmousedown = function (e) {
-            let offsetX = e.clientX - el.offsetLeft;
-            let offsetY = e.clientY - el.offsetTop;
-            function mouseMoveHandler(e) {
-                el.style.top = (e.clientY - offsetY) + 'px';
-                el.style.left = (e.clientX - offsetX) + 'px';
-            }
-            function reset() {
-                document.removeEventListener('mousemove', mouseMoveHandler);
-                document.removeEventListener('mouseup', reset);
-            }
-            document.addEventListener('mousemove', mouseMoveHandler);
-            document.addEventListener('mouseup', reset);
-        };
-    };
+-- Create toggle icon
+local Icon = Instance.new("ImageButton")
+Icon.Size = UDim2.new(0, 50, 0, 50)
+Icon.Position = UDim2.new(0, 20, 1, -70)
+Icon.BackgroundTransparency = 1
+Icon.Image = "rbxassetid://INSERT_IMAGE_ID_HERE" -- Replace with image ID of your uploaded icon
+Icon.Parent = ScreenGui
 
-    const createIconToggle = () => {
-        const icon = document.createElement('img');
-        icon.src = 'data:image/png;base64,...'; // replace with base64 of uploaded icon
-        icon.style = 'position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; z-index: 10001; cursor: pointer;';
-        icon.onclick = () => {
-            const panel = document.getElementById('stealthHubContainer');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-        };
-        document.body.appendChild(icon);
-    };
+Icon.MouseButton1Click:Connect(function()
+    Frame.Visible = not Frame.Visible
+end)
 
-    const automate = () => {
-        setInterval(() => {
-            if (!enabled) return;
-            try {
-                // Replace the following with actual game logic selectors and actions
-                console.log('Buying bamboos...');
-                console.log('Planting bamboos...');
-                console.log('Harvesting plants...');
-                console.log('Selling plants...');
-                console.log('Buying prismatic if available...');
-                console.log('Buying eggs...');
-                console.log('Placing eggs...');
-                console.log('Hatching eggs if ready...');
-                console.log('Placing new eggs...');
-            } catch (e) {
-                console.error('Error in automation loop:', e);
-            }
-        }, 5000);
-    };
+-- Automation loop
+spawn(function()
+    while true do
+        if enabled then
+            -- Add actual RemoteEvents or logic here
+            print("Buying bamboo...")
+            print("Planting bamboo...")
+            print("Harvesting and selling...")
+            print("Buying prismatic if available...")
+            print("Buying, placing and hatching eggs...")
+        end
+        wait(5)
+    end
+end)
 
-    createUI();
-    createIconToggle();
-    automate();
-})();
+print("Stealth Hub loaded.")
