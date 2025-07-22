@@ -1,0 +1,91 @@
+// ==UserScript==
+// @name         Stealth Hub
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  Automate bamboo buying, planting, harvesting, selling, egg handling, and prismatic purchase
+// @author       You
+// @match        *://*/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    let enabled = false;
+
+    const createUI = () => {
+        const container = document.createElement('div');
+        container.id = 'stealthHubContainer';
+        container.style = 'position: fixed; top: 100px; left: 100px; width: 200px; background: #111; color: white; border: 1px solid #444; padding: 10px; z-index: 10000; font-family: Arial; border-radius: 8px;';
+
+        const title = document.createElement('div');
+        title.innerText = 'Stealth Hub';
+        title.style = 'font-size: 18px; margin-bottom: 10px; text-align: center;';
+
+        const enableToggle = document.createElement('button');
+        enableToggle.innerText = 'Enable';
+        enableToggle.style = 'width: 100%; padding: 5px;';
+        enableToggle.onclick = () => {
+            enabled = !enabled;
+            enableToggle.innerText = enabled ? 'Disable' : 'Enable';
+        };
+
+        container.appendChild(title);
+        container.appendChild(enableToggle);
+        document.body.appendChild(container);
+
+        makeDraggable(container);
+    };
+
+    const makeDraggable = (el) => {
+        el.onmousedown = function (e) {
+            let offsetX = e.clientX - el.offsetLeft;
+            let offsetY = e.clientY - el.offsetTop;
+            function mouseMoveHandler(e) {
+                el.style.top = (e.clientY - offsetY) + 'px';
+                el.style.left = (e.clientX - offsetX) + 'px';
+            }
+            function reset() {
+                document.removeEventListener('mousemove', mouseMoveHandler);
+                document.removeEventListener('mouseup', reset);
+            }
+            document.addEventListener('mousemove', mouseMoveHandler);
+            document.addEventListener('mouseup', reset);
+        };
+    };
+
+    const createIconToggle = () => {
+        const icon = document.createElement('img');
+        icon.src = 'data:image/png;base64,...'; // replace with base64 of uploaded icon
+        icon.style = 'position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; z-index: 10001; cursor: pointer;';
+        icon.onclick = () => {
+            const panel = document.getElementById('stealthHubContainer');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        };
+        document.body.appendChild(icon);
+    };
+
+    const automate = () => {
+        setInterval(() => {
+            if (!enabled) return;
+            try {
+                // Replace the following with actual game logic selectors and actions
+                console.log('Buying bamboos...');
+                console.log('Planting bamboos...');
+                console.log('Harvesting plants...');
+                console.log('Selling plants...');
+                console.log('Buying prismatic if available...');
+                console.log('Buying eggs...');
+                console.log('Placing eggs...');
+                console.log('Hatching eggs if ready...');
+                console.log('Placing new eggs...');
+            } catch (e) {
+                console.error('Error in automation loop:', e);
+            }
+        }, 5000);
+    };
+
+    createUI();
+    createIconToggle();
+    automate();
+})();
